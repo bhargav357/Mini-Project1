@@ -1,0 +1,711 @@
+
+Create Table:
+=============
+Class.forName("com.mysql.jdbc.Driver");
+		Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/java10247","root","root");
+		Statement st=con.createStatement();
+		String query="create table usernew(userid int,uname varchar(78))";
+		st.execute(query);
+		con.close();
+		System.out.println("created successfully");
+========================================================================================
+Insert Table:
+==============
+Class.forName("com.mysql.jdbc.Driver");
+		Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/java10247","root","root");
+		PreparedStatement st=con.prepareStatement("insert into usernew values(?,?)");
+		st.setInt(1, 1001);
+		st.setString(2, "gayathri");
+		st.executeUpdate();
+		con.close();
+		System.out.println("created successfully");
+=============================================================================================
+Update Table:
+=============
+Class.forName("com.mysql.jdbc.Driver");
+		Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/java10247","root","root");
+		PreparedStatement st=con.prepareStatement("update usernew set uname=? where userid=?");
+		
+		st.setString(1, "ravi");
+		st.setInt(2, 1001);
+		st.executeUpdate();
+		con.close();
+		System.out.println("created successfully");
+		
+		
+==============================================================================================
+Delete:
+Class.forName("com.mysql.jdbc.Driver");
+		Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/java10247","root","root");
+		PreparedStatement st=con.prepareStatement("delete from usernew where userid=?");
+		
+		
+		st.setInt(1, 1001);
+		st.executeUpdate();
+		con.close();
+		System.out.println("created successfully");
+
+
+------------------------------------------------------------------------------------------------------------------------------------
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class SelectExample {
+
+	public static void main(String[] args) throws ClassNotFoundException, SQLException {
+		Class.forName("com.mysql.jdbc.Driver");
+		Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/java10247","root","root");
+		PreparedStatement st=con.prepareStatement("select * from usernew");
+		ResultSet rs=st.executeQuery();
+		while(rs.next())
+		{
+			System.out.println(rs.getInt(1));
+			System.out.println(rs.getString(2));
+
+		}
+		
+		
+		System.out.println("created successfully");
+
+	}
+
+}
+
+
+=======================================================================================
+
+
+================================================================================
+------------------------------------------------------------------------------------------
+package model;
+
+public class User 
+{
+	private int userId;
+	private String userName;
+	private String city;
+	private String state;
+	public User()
+	{
+		
+	}
+	public User(int userId, String userName, String city, String state) {
+		super();
+		this.userId = userId;
+		this.userName = userName;
+		this.city = city;
+		this.state = state;
+	}
+	public int getUserId() {
+		return userId;
+	}
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	public String getCity() {
+		return city;
+	}
+	public void setCity(String city) {
+		this.city = city;
+	}
+	public String getState() {
+		return state;
+	}
+	public void setState(String state) {
+		this.state = state;
+	}
+	@Override
+	public String toString() {
+		return "User [userId=" + userId + ", userName=" + userName + ", city=" + city + ", state=" + state + "]";
+	}
+	
+	
+
+}
+package service;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import dao.UserDao;
+import model.User;
+
+public class UserService
+{
+	public void view() throws ClassNotFoundException, SQLException
+	{
+		List<User>userlist=new UserDao().viewUser();
+		for(User u:userlist)
+		{
+			System.out.println(u.getUserId());
+			System.out.println(u.getUserName());
+			System.out.println(u.getCity());
+			System.out.println(u.getState());
+		}
+	}
+
+}
+
+
+
+
+package dao;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import model.User;
+
+public class UserDao 
+{
+	public List<User>viewUser() throws ClassNotFoundException, SQLException
+	{
+		ArrayList<User> list=new ArrayList<User>();
+		Class.forName("com.mysql.jdbc.Driver");
+		Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/java10247","root","root");
+		PreparedStatement st=con.prepareStatement("select * from user");
+		ResultSet rs=st.executeQuery();
+		while(rs.next())
+		{
+			User u=new User();
+		   u.setUserId(rs.getInt(1));
+		   u.setUserName(rs.getString(2));
+		   u.setCity(rs.getString(3));
+		   u.setState(rs.getString(4));
+		   list.add(u);
+		}
+		return list;
+	}
+
+}
+
+
+
+package view;
+
+import java.sql.SQLException;
+import java.util.Scanner;
+
+import service.UserService;
+
+public class UserView {
+    static Scanner sc=new Scanner(System.in);
+
+    public static void main(String[] args) throws ClassNotFoundException, SQLException {
+        System.out.println("====================================================================");
+        System.out.println("============= User Management System =============================");
+        System.out.println("====================================================================");
+        String ch;
+         UserService app=new UserService();
+        do
+        {
+        
+        System.out.println("\t\t 1)View User Information\r\n"
+                + "\t\t 2)Insert User info by  id.\r\n"
+                + "\t\t 3)view all User information By Id.\r\n"
+                + "\t\t 4)Update User information by id.\r\n"
+                + "\t\t 5)delete User information by id.\r\n"
+                + "\t\t 6)delete all User information.");
+        System.out.println("====================================================================");
+        System.out.println("Enter your choice:");
+        int choice=sc.nextInt();
+        
+        switch(choice)
+        {
+        
+        case 1: app.view();
+                break;
+        case 2: 
+        break;
+        case 3: 
+        break;
+        case 4: 
+        break;
+        case 5: 
+        break;
+        case 6: 
+        break;
+        default:System.out.println("Wrong choice!!");          
+        
+        
+        
+        }
+        
+        System.out.println("Do you want to continue? (Y-Yes / N-No)");
+         ch=sc.next();
+        }
+        while(ch.equals("Y")||ch.equals("y"));
+        System.out.println("====================================================================");
+
+        System.out.println("Bye....");
+    
+        System.out.println("====================================================================");
+
+
+    }
+
+    }
+
+
+---------------------------------------------------------------------------------------------
+
+public void userInsert() throws ClassNotFoundException, SQLException
+     {
+    	 User u=new User();
+    	 Scanner sc=new Scanner(System.in);
+    	 System.out.println("enter the userid");
+    	 int userid=sc.nextInt();
+    	 System.out.println("enter the username");
+    	 String username=sc.next();
+    	 System.out.println("enter the city");
+    	 String city=sc.next();
+    	 System.out.println("enter the state");
+    	 String state=sc.next();
+    	 u.setUserId(userid);
+    	 u.setUserName(username);
+    	 u.setCity(city);
+    	 u.setState(state);
+    	 new UserDaoImplementation().insertUser(u);
+     }
+
+
+--------------------------------------------------------------------------------------
+package service;
+
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Scanner;
+
+import dao.UserDao;
+import dao.UserDaoImplementation;
+import model.User;
+
+public class UserService
+{
+    public void view() throws ClassNotFoundException, SQLException
+    {
+        List<User>userlist=new UserDaoImplementation().viewUser();
+        for(User u:userlist)
+        {
+            System.out.println(u.getUserId());
+            System.out.println(u.getUserName());
+            System.out.println(u.getCity());
+            System.out.println(u.getState());
+        }
+    }
+     public void userInsert() throws ClassNotFoundException, SQLException
+     {
+         User u=new User();
+         Scanner sc=new Scanner(System.in);
+         System.out.println("enter the userid");
+         int userid=sc.nextInt();
+         System.out.println("enter the username");
+         String username=sc.next();
+         System.out.println("enter the city");
+         String city=sc.next();
+         System.out.println("enter the state");
+         String state=sc.next();
+         u.setUserId(userid);
+         u.setUserName(username);
+         u.setCity(city);
+         u.setState(state);
+         new UserDaoImplementation().insertUser(u);
+     }
+}
+
+
+package dao;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import model.User;
+
+public class UserDaoImplementation implements UserDao
+{
+    public List<User>viewUser() throws ClassNotFoundException, SQLException
+    {
+        ArrayList<User> list=new ArrayList<User>();
+        Class.forName("com.mysql.jdbc.Driver");
+        Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/java10247","root","root");
+        PreparedStatement st=con.prepareStatement("select * from user");
+        ResultSet rs=st.executeQuery();
+        while(rs.next())
+        {
+            User u=new User();
+           u.setUserId(rs.getInt(1));
+           u.setUserName(rs.getString(2));
+           u.setCity(rs.getString(3));
+           u.setState(rs.getString(4));
+           list.add(u);
+        }
+        return list;
+    }
+    public void insertUser(User u) throws ClassNotFoundException, SQLException
+    {
+        Class.forName("com.mysql.jdbc.Driver");
+        Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/java10247","root","root");
+        PreparedStatement st=con.prepareStatement("insert into user values(?,?,?,?)");
+        st.setInt(1, u.getUserId());
+        st.setString(2, u.getUserName());
+        st.setString(3, u.getCity());
+        st.setString(4, u.getState());
+        st.executeUpdate();
+        System.out.println("updated");
+    }
+
+}
+
+
+
+package dao;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import model.User;
+
+public interface UserDao
+{
+    public List<User>viewUser() throws ClassNotFoundException, SQLException;
+    public void insertUser(User u) throws ClassNotFoundException, SQLException;
+
+}
+
+
+package view;
+
+import java.sql.SQLException;
+import java.util.Scanner;
+
+import service.UserService;
+
+public class UserView {
+    static Scanner sc=new Scanner(System.in);
+
+    public static void main(String[] args) throws ClassNotFoundException, SQLException {
+        System.out.println("====================================================================");
+        System.out.println("============= User Management System =============================");
+        System.out.println("====================================================================");
+        String ch;
+         UserService app=new UserService();
+        do
+        {
+        
+        System.out.println("\t\t 1)View User Information\r\n"
+                + "\t\t 2)Insert User info by  id.\r\n"
+                + "\t\t 3)view all User information By Id.\r\n"
+                + "\t\t 4)Update User information by id.\r\n"
+                + "\t\t 5)delete User information by id.\r\n"
+                + "\t\t 6)delete all User information.");
+        System.out.println("====================================================================");
+        System.out.println("Enter your choice:");
+        int choice=sc.nextInt();
+        
+        switch(choice)
+        {
+        
+        case 1: app.view();
+                break;
+        case 2:     app.userInsert();
+        
+        
+        break;
+        case 3: 
+        break;
+        case 4: 
+        break;
+        case 5: 
+        break;
+        case 6: 
+        break;
+        default:System.out.println("Wrong choice!!");          
+        
+        
+        
+        }
+        
+        System.out.println("Do you want to continue? (Y-Yes / N-No)");
+         ch=sc.next();
+        }
+        while(ch.equals("Y")||ch.equals("y"));
+        System.out.println("====================================================================");
+
+        System.out.println("Bye....");
+    
+        System.out.println("====================================================================");
+
+
+    }
+
+    }
+
+
+
+------------------------------------------------------------------------------------------
+package service;
+
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Scanner;
+
+import dao.UserDao;
+import dao.UserDaoImplementation;
+import model.User;
+
+public class UserService
+{
+    public void view() throws ClassNotFoundException, SQLException
+    {
+        List<User>userlist=new UserDaoImplementation().viewUser();
+        for(User u:userlist)
+        {
+            System.out.println(u.getUserId());
+            System.out.println(u.getUserName());
+            System.out.println(u.getCity());
+            System.out.println(u.getState());
+        }
+    }
+     public void userInsert() throws ClassNotFoundException, SQLException
+     {
+         User u=new User();
+         Scanner sc=new Scanner(System.in);
+         System.out.println("enter the userid");
+         int userid=sc.nextInt();
+         System.out.println("enter the username");
+         String username=sc.next();
+         System.out.println("enter the city");
+         String city=sc.next();
+         System.out.println("enter the state");
+         String state=sc.next();
+         u.setUserId(userid);
+         u.setUserName(username);
+         u.setCity(city);
+         u.setState(state);
+         new UserDaoImplementation().insertUser(u);
+     }
+}
+
+
+package dao;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import model.User;
+
+public class UserDaoImplementation implements UserDao
+{
+    public List<User>viewUser() throws ClassNotFoundException, SQLException
+    {
+        ArrayList<User> list=new ArrayList<User>();
+        Class.forName("com.mysql.jdbc.Driver");
+        Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/java10247","root","root");
+        PreparedStatement st=con.prepareStatement("select * from user");
+        ResultSet rs=st.executeQuery();
+        while(rs.next())
+        {
+            User u=new User();
+           u.setUserId(rs.getInt(1));
+           u.setUserName(rs.getString(2));
+           u.setCity(rs.getString(3));
+           u.setState(rs.getString(4));
+           list.add(u);
+        }
+        return list;
+    }
+    public void insertUser(User u) throws ClassNotFoundException, SQLException
+    {
+        Class.forName("com.mysql.jdbc.Driver");
+        Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/java10247","root","root");
+        PreparedStatement st=con.prepareStatement("insert into user values(?,?,?,?)");
+        st.setInt(1, u.getUserId());
+        st.setString(2, u.getUserName());
+        st.setString(3, u.getCity());
+        st.setString(4, u.getState());
+        st.executeUpdate();
+        System.out.println("updated");
+    }
+
+}
+
+
+
+package dao;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import model.User;
+
+public interface UserDao
+{
+    public List<User>viewUser() throws ClassNotFoundException, SQLException;
+    public void insertUser(User u) throws ClassNotFoundException, SQLException;
+
+}
+
+
+package view;
+
+import java.sql.SQLException;
+import java.util.Scanner;
+
+import service.UserService;
+
+public class UserView {
+    static Scanner sc=new Scanner(System.in);
+
+    public static void main(String[] args) throws ClassNotFoundException, SQLException {
+        System.out.println("====================================================================");
+        System.out.println("============= User Management System =============================");
+        System.out.println("====================================================================");
+        String ch;
+         UserService app=new UserService();
+        do
+        {
+        
+        System.out.println("\t\t 1)View User Information\r\n"
+                + "\t\t 2)Insert User info by  id.\r\n"
+                + "\t\t 3)view all User information By Id.\r\n"
+                + "\t\t 4)Update User information by id.\r\n"
+                + "\t\t 5)delete User information by id.\r\n"
+                + "\t\t 6)delete all User information.");
+        System.out.println("====================================================================");
+        System.out.println("Enter your choice:");
+        int choice=sc.nextInt();
+        
+        switch(choice)
+        {
+        
+        case 1: app.view();
+                break;
+        case 2:     app.userInsert();
+        
+        
+        break;
+        case 3: 
+        break;
+        case 4: 
+        break;
+        case 5: 
+        break;
+        case 6: 
+        break;
+        default:System.out.println("Wrong choice!!");          
+        
+        
+        
+        }
+        
+        System.out.println("Do you want to continue? (Y-Yes / N-No)");
+         ch=sc.next();
+        }
+        while(ch.equals("Y")||ch.equals("y"));
+        System.out.println("====================================================================");
+
+        System.out.println("Bye....");
+    
+        System.out.println("====================================================================");
+
+
+    }
+
+    }
+
+
+
+-----------------------------------------------------------------------------------------
+
+Update:
+
+public void userUpdate() throws ClassNotFoundException, SQLException
+     {
+    	 User u=new User();
+    	 Scanner sc=new Scanner(System.in);
+    	 
+    	 System.out.println("enter the username");
+    	 String username=sc.next();
+    	 System.out.println("enter the city");
+    	 String city=sc.next();
+    	 System.out.println("enter the state");
+    	 String state=sc.next();
+    	 System.out.println("enter the userid");
+    	 int userid=sc.nextInt();
+    	 u.setUserName(username);
+    	 u.setCity(city);
+    	 u.setState(state);
+    	 u.setUserId(userid);
+    	 new UserDaoImplementation().updateUser(u);
+     }
+app.userUpdate();
+		break;
+@Override
+	public void updateUser(User u) throws ClassNotFoundException, SQLException {
+		Class.forName("com.mysql.jdbc.Driver");
+		Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/java10247","root","root");
+		PreparedStatement st=con.prepareStatement("update user set username=?,city=?,state=? where userid=?");
+		
+		st.setString(1, u.getUserName());
+		st.setString(2, u.getCity());
+		st.setString(3, u.getState());
+		st.setInt(4, u.getUserId());
+		st.executeUpdate();
+		System.out.println("updated");
+		
+	}
+public void updateUser(User u) throws ClassNotFoundException, SQLException;
+
+-------------------------------------------------------------------------------------------------------------------------
+
+case 4:	app.userDelete();
+		break;
+public void userDelete() throws ClassNotFoundException, SQLException
+     {
+    	
+    	 Scanner sc=new Scanner(System.in);
+    	 
+    	
+    	 System.out.println("enter the userid");
+    	 int userid=sc.nextInt();
+    	
+    	 new UserDaoImplementation().deleteUser(userid);
+     }
+@Override
+	public void deleteUser(int userid) throws ClassNotFoundException, SQLException {
+		Class.forName("com.mysql.jdbc.Driver");
+		Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/java10247","root","root");
+		PreparedStatement st=con.prepareStatement("delete from user where userid=?");
+		
+
+		st.setInt(1, userid);
+		st.executeUpdate();
+		System.out.println("deleted");
+		
+	}
+public void deleteUser(int  userid) throws ClassNotFoundException, SQLException;
+----------------------------------------------------------------------------------------------------------------------------------
